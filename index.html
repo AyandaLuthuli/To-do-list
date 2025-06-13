@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-do-list</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #92bdce;
+        margin: 0;
+        padding: 20px;
+      }
+      h1 {
+        color: #000000;
+        display: flex;
+      }
+      h1 img {
+        width: 50px;
+        height: 50px;
+        margin-left: 10px;
+        border-radius: 50%;
+        margin-top: -18px;
+      }
+      .To-do-list-cont {
+        max-width: 500px;
+        margin: 0 auto;
+        background-color: #dbdbdb;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      #todo-form {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        background-color: rgb(173, 173, 173);
+        border-radius: 50px;
+        height: 50px;
+        border: none;
+      }
+
+      #todo-form input {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        background-color: rgb(173, 173, 173);
+        border: none;
+      }
+      #todo-form button {
+        padding: 10px 15px;
+        background-color: #faac1c;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 50px;
+        width: 160px;
+      }
+
+      ul li {
+        list-style: none;
+        font-size: 17px;
+        padding: 12px 8px 12px 50px;
+        user-select: none;
+        cursor: pointer;
+        position: relative;
+        margin-left: -50px;
+      }
+
+      ul li::before {
+        content: "";
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-image: url("uncheckd.png");
+        background-size: cover;
+        margin-right: 10px;
+
+        border-radius: 50%;
+        background-position: center;
+        left: 12px;
+        top: 8px;
+      }
+
+      ul li.checked {
+        text-decoration: line-through;
+        color: #888;
+      }
+
+      ul li.checked::before {
+        background-image: url("checked.png");
+      }
+      ul li span {
+        position: absolute;
+        right: 10px;
+        color: #888;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 30px;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        padding: auto;
+      }
+      ul li span:hover {
+        background-color: #707070;
+        color: #faac1c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="title">To-do List</h1>
+
+    <div class="To-do-list-cont">
+      <h1>To-do List <img src="todolist.png" /></h1>
+
+      <div id="todo-form">
+        <input
+          type="text"
+          id="todo-input"
+          placeholder="Add a new task"
+          required
+        />
+        <button type="submit" onclick="AddTask()">Add</button>
+      </div>
+      <div id="list-cont">
+        <ul id="todo-list">
+          <!-- <ul>
+          <li class="checked" id="todo-list">Task 1</li>
+          <li id="todo-list">Task 3</li>
+          <li id="todo-list">Task 4</li> -->
+        </ul>
+      </div>
+    </div>
+  </body>
+  <script>
+    const todoinput = document.getElementById("todo-input");
+    const listcont = document.getElementById("todo-list");
+
+    function AddTask() {
+      if (todoinput.value.trim() === "") {
+        alert("Please enter a task.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.innerHTML = todoinput.value;
+      listcont.appendChild(li);
+      let span = document.createElement("span");
+      span.innerHTML = "\u00d7";
+      li.appendChild(span);
+      todoinput.value = "";
+      saveData();
+    }
+
+    listcont.addEventListener("click", function (e) {
+      if (e.target.tagName === "LI") {
+        e.target.classList.toggle("checked");
+        saveData();
+      } else if (e.target.tagName === "SPAN") {
+        e.target.parentElement.remove();
+        saveData();
+      }
+    });
+
+    function saveData() {
+      localStorage.setItem("todoList", listcont.innerHTML);
+    }
+    function loadData() {
+      const savedData = localStorage.getItem("todoList");
+      if (savedData) {
+        listcont.innerHTML = savedData;
+      }
+    }
+    loadData();
+  </script>
+</html>
